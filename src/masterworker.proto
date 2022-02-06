@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package masterworker;
+
+// Worker service definition
+service Worker {
+    rpc Map (MapTask) returns (MapReply) {}
+    rpc Reduce(ReduceTask) returns (ReduceReply) {}
+}
+
+// Map request message
+message MapTask {
+    repeated FileShardPiece file_shard = 1;
+    int32 temp_files_num = 2;
+    string user_id = 3;
+}
+
+message FileShardPiece {
+    string filename = 1;
+    int32 offset = 2;
+    int32 end = 3;
+}
+
+// Map response message
+message MapReply {
+    repeated string map_out_files = 1;
+}
+
+// Reduce request message
+message ReduceTask {
+    repeated string temp_files = 1;
+    string user_id = 2;
+}
+
+// Reduce response message
+message ReduceReply {
+    string reduce_out_file = 1;
+}
